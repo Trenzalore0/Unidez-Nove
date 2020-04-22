@@ -1,0 +1,44 @@
+* {
+  padding: 0;
+  margin: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: aliceblue;
+}
+
+header {
+  width: 100%;
+  height: 50px;
+  background-color: darkblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 90%;
+  max-width: 1080px;
+  height: 100%;
+}
+
+footer {
+  position: fixed;
+  top: 92.3vh;
+  width: 100%;
+  height: 50px;
+  border: 1px solid black;
+  background-color: darkslateblue;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+footer .center {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
