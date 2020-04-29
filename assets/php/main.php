@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/json');
+
 $conn = mysqli_connect('remotemysql.com:3306', 'VO8Zv3eZMb', 'EKJFEVlRwl', 'VO8Zv3eZMb');
 
 if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
@@ -16,15 +18,17 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
             
             if($resu['email'] == $email) {
                 
-                $usu->id = $resu['id'];
+                $usu['id'] = $resu['id'];
 
-                $usu->nome = $resu['nome'];
+                $usu['nome'] = $resu['nome'];
 
-                $usu->email = $resu['email'];
+                $usu['email'] = $resu['email'];
 
-                $usu->senha = $resu['senha'];
+                $usu['senha'] = $resu['senha'];
 
-                $obj->usuario = $usu;
+                $obj['usuario'] = $usu;
+
+                echo json_encode($obj);
 
             }
 
@@ -36,16 +40,14 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
 
 else if(isset($_GET['cadNome']) && isset($_GET['cadEmail']) && isset($_GET['cadSenha'])) {
 
-    $usu->nome = htmlspecialchars($_GET['cadNome']);
+    $usu['nome'] = htmlspecialchars($_GET['cadNome']);
 
-    $usu->email -htmlspecialchars($_GET['cadEmail']);
+    $usu['email'] = htmlspecialchars($_GET['cadEmail']);
 
-    $usu->senha = htmlspecialchars($_GET['cadSenha']);
+    $usu['senha'] = htmlspecialchars($_GET['cadSenha']);
 
-    $obj->usuario = $usu;
+    $obj['usuario'] = $usu;
+
+    echo json_encode($obj);
 
 }
-
-header('Content-Type: application/json');
-
-echo json_encode($obj);
