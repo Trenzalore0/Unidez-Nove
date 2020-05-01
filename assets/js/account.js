@@ -16,6 +16,46 @@ function minhaPromise(url) {
   });
 }
 
+function metaJanela() {
+  return(`${(window.document.body.scrollWidth / 2) - 200}px`);
+};
+
+function erroGerado(objeto) {
+  let span = document.createElement('span');
+  span.id = 'span';
+  span.style.backgroundColor = '#fa000080';
+  span.style.left = metaJanela();
+  if(objeto == logEmail) {
+    span.textContent = 'Email não cadastrado!';
+  } else if(objeto == logSenha) {
+    span.textContent = 'Senha Incorreta!';
+  } else if(objeto == cadEmail) {
+    span.textContent = 'Email já cadastrado!';
+  } else if(objeto == cadSenha) {
+    span.textContent = 'As senhas não coincidem!';
+  }
+  window.document.body.appendChild(span);
+  setTimeout(function() {
+    span.style.display = 'none'; 
+  }, 5000);
+}
+
+function certoGerado(objeto, mensagem) {
+  let span = document.createElement('span');
+  span.id = 'span';
+  span.style.backgroundColor = '#00fa0090';
+  span.style.left = metaJanela();
+  if(objeto == logEmail) {
+    span.textContent = `Sejá bem vindo! ${mensagem}!`;
+  } else if(objeto == cadEmail) {
+    span.textContent = 'Cadastrado com sucesso!';
+  } 
+  window.document.body.appendChild(span);
+  setTimeout(function() {
+    span.style.display = 'none'; 
+  }, 5000);
+}
+
 let login = document.querySelector('.login');
 let cad = document.querySelector('.cadastrar');
 
@@ -31,7 +71,21 @@ login.addEventListener('submit', function(event) {
   event.preventDefault();
   minhaPromise(`logEmail=${logEmail.value}&logSenha=${logSenha.value}`)
     .then(function(data) {
-      console.log(data);
+      if(data.usuario.email == logEmail.value) {
+        if(data.usuario.senha == logSenha.value) {
+          certoGerado(logEmail, data.usuario.nome);
+          localStorage.setItem('id', data.usuario.id);
+          localStorage.setItem('nome', data.usuario.nome);
+          localStorage.setItem('email', data.usuario.email);
+          console.log(localStorage.getItem('id'));
+        }
+        else {
+          erroGerado(logSenha);
+        }
+      }
+      else {
+        erroGerado(logEmail);
+      }
     })
     .catch(function(err) {
       console.warn(err);
@@ -44,10 +98,16 @@ cad.addEventListener('submit', function(event) {
     let cadUrl = `cadNome=${cadNome.value}&cadEmail=${cadEmail.value}&cadSenha=${cadSenha.value}`; 
     minhaPromise(cadUrl)
     .then(function(data) {
-      console.log(data);
+      if(data.usuario.email == cadEmail.value) {
+        certoGerado(cadEmail);
+      } else {
+        erroGerado(cadEmail);
+      }
     })
     .catch(function(err) {
       console.warn(err);
     });
+  } else {
+    erroGerado(cadSenha);
   }
 })

@@ -35,3 +35,18 @@ input[type="submit"] {
 input[type="submit"]:hover, input[type="submit"]:focus {
   background-color: darkcyan;
 }
+
+#span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50px;
+  width: 400px;
+  height: 150px;
+  background-color: #fa000080;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  user-select: none;
+}
