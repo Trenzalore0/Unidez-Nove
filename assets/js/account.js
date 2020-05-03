@@ -23,7 +23,7 @@ function metaJanela() {
 function erroGerado(objeto) {
   let span = document.createElement('span');
   span.id = 'span';
-  span.style.backgroundColor = '#fa000080';
+  span.style.backgroundColor = '#fa000090';
   span.style.left = metaJanela();
   if(objeto == logEmail) {
     span.textContent = 'Email não cadastrado!';
