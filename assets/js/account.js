@@ -16,7 +16,7 @@ function minhaPromise(url) {
   });
 }
 
-function metaJanela() {
+function metadeJanela() {
   return(`${(window.document.body.scrollWidth / 2) - 200}px`);
 };
 
@@ -24,7 +24,7 @@ function erroGerado(objeto) {
   let span = document.createElement('span');
   span.id = 'span';
   span.style.backgroundColor = '#fa000090';
-  span.style.left = metaJanela();
+  span.style.left = metadeJanela();
   if(objeto == logEmail) {
     span.textContent = 'Email não cadastrado!';
   } else if(objeto == logSenha) {
