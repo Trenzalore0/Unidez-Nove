@@ -1,7 +1,7 @@
 function minhaPromise(url) {
   return new Promise(function(resolve, reject) {
     let xhr = new XMLHttpRequest(); 
-    xhr.open('GET', `../php/main.php?${url}`);
+    xhr.open('GET', `../php/main.php?${url}`); //http://badwolf.epizy.com/
     xhr.send(null);
 
     xhr.onreadystatechange = function() {
