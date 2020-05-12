@@ -13,7 +13,8 @@ body {
 header {
   width: 100%;
   height: 50px;
-  background-color: darkblue;
+  border: 1px solid black;
+  background-color: darkslateblue;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,4 +44,29 @@ footer .center {
   justify-content: center;
   align-items: center;
   user-select: none;
+}
+
+input {
+  border-radius: 20px;
+  height: 30px;
+  text-indent: 10px;
+  width: 200px;
+  font-size: 18px;
+  border: 1px solid black;
+}
+
+.log {
+  width: 100px;
+  height: 100%;
+  position: relative;
+  float: right;
+  text-align: center;
+  user-select: none;
+}
+
+.log a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
 }

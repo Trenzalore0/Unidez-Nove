@@ -1,10 +1,5 @@
-let id = localStorage.getItem('id');
-let log = document.querySelector('.log a');
+let exit = document.querySelector('.painel input');
 
-if(id == null) {
-  log.textContent = 'Logar / Cadastrar';
-} else {
-  let nome = localStorage.getItem('nome');
-  log.textContent = `olá ${nome}!`;
+exit.onclick = function() {
+  localStorage.clear();
 }
-

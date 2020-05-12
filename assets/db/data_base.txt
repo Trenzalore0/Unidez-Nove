@@ -21,3 +21,4 @@ create table games(
     id int auto_increment not null primary key,
     nome varchar(150)
 );
+

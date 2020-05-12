@@ -14,15 +14,6 @@ p {
   user-select: none;
 }
 
-input {
-  border-radius: 20px;
-  height: 30px;
-  text-indent: 10px;
-  width: 200px;
-  font-size: 18px;
-  border: 1px solid black;
-}
-
 input[type="submit"] {
   width: 150px;
   text-indent: 0px;
