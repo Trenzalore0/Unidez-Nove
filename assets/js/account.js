@@ -39,11 +39,20 @@ function erroGerado(objeto) {
   }, 5000);
 }
 
+function Session() {
+  let jaLogou = localStorage.getItem('id');
+  if(jaLogou == null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function certoGerado(objeto, mensagem) {
   let span = document.createElement('span');
   span.id = 'span';
   span.style.backgroundColor = '#00fa0090';
-  span.style.left = metaJanela();
+  span.style.left = metadeJanela();
   if(objeto == logEmail) {
     span.textContent = `Sejá bem vindo! ${mensagem}!`;
   } else if(objeto == cadEmail) {
@@ -68,45 +77,53 @@ let cadConSenha = document.getElementById('cadConSenha');
 
 login.addEventListener('submit', function(event) {
   event.preventDefault();
-  minhaPromise(`logEmail=${logEmail.value}&logSenha=${logSenha.value}`)
-    .then(function(data) {
-      if(data.usuario.email == logEmail.value) {
-        if(data.usuario.senha == logSenha.value) {
-          certoGerado(logEmail, data.usuario.nome);
-          localStorage.setItem('id', data.usuario.id);
-          localStorage.setItem('nome', data.usuario.nome);
-          localStorage.setItem('email', data.usuario.email);
-          console.log(localStorage.getItem('id'));
+  if(Session() == true) {
+    minhaPromise(`logEmail=${logEmail.value}&logSenha=${logSenha.value}`)
+      .then(function(data) {
+        if(data.usuario.email == logEmail.value) {
+          if(data.usuario.senha == logSenha.value) {
+            certoGerado(logEmail, data.usuario.nome);
+            localStorage.setItem('id', data.usuario.id);
+            localStorage.setItem('nome', data.usuario.nome);
+            localStorage.setItem('email', data.usuario.email);
+            setTimeout(function() {
+              window.location.replace('index.html');
+            }, 2000);
+          }
+          else {
+            erroGerado(logSenha);
+          }
         }
         else {
-          erroGerado(logSenha);
+          erroGerado(logEmail);
         }
-      }
-      else {
-        erroGerado(logEmail);
-      }
-    })
-    .catch(function(err) {
-      console.warn(err);
-    });
+      })
+      .catch(function(err) {
+        console.warn(err);
+      });
+  } else {
+    window.location.replace('index.html');
+  }
 })
 
 cad.addEventListener('submit', function(event) {
   event.preventDefault();
-  if(cadSenha.value == cadConSenha.value) {
-    let cadUrl = `cadNome=${cadNome.value}&cadEmail=${cadEmail.value}&cadSenha=${cadSenha.value}`; 
-    minhaPromise(cadUrl)
-    .then(function(data) {
-      if(data.usuario.email == cadEmail.value) {
-        certoGerado(cadEmail);
-      } else {
-        erroGerado(cadEmail);
-      }
-    })
-    .catch(function(err) {
-      console.warn(err);
-    });
-  } else {
-    erroGerado(cadSenha);
+  if(Session() == true) {
+    if(cadSenha.value == cadConSenha.value) {
+      minhaPromise(`cadNome=${cadNome.value}&cadEmail=${cadEmail.value}&cadSenha=${cadSenha.value}`)
+      .then(function(data) {
+        if(data.usuario.email == cadEmail.value) {
+          certoGerado(cadEmail);
+          console.log(data);
+        } else {
+          erroGerado(cadEmail);
+        }
+      })
+      .catch(function(err) {
+        console.warn(err);
+      });
+    } else {
+      erroGerado(cadSenha);
+    }
   }
 })
