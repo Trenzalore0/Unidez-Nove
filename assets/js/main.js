@@ -20,7 +20,7 @@ function logado() {
 if(id == null) {
   if(document.title == 'Login') {
     log.href = "index.html";
-    log.textContent = 'Voltar para a Home Page';
+    log.textContent = 'Voltar para a Home';
   } else {
     log.href = "account.html";
     log.textContent = 'Logar / Cadastrar';
