@@ -10,15 +10,48 @@ Server: remotemysql.com
 
 Port: 3306
 
-create table users(
+create table users (
     id int auto_increment not null primary key,
     nome varchar(130),
     email varchar(130),
     senha varchar(130)
 );
 
-create table games(
+create table games (
     id int auto_increment not null primary key,
     nome varchar(150)
 );
 
+create table comentarios (
+    id int auto_increment not null primary key,
+    id_criador int(111),
+    conteudo varchar(1000)
+);
+
+create table respostas (
+    id int auto_increment not null primary key,
+    id_criador int(111),
+    conteudo varchar(1000)
+);
+
+create table comentarios_has_respostas (
+    id int auto_increment not null primary key,
+    id_comentario int(111),
+    id_resposta int(111),
+);
+
+alter table comentarios
+add constraint fk_criador_comentario
+foreign key (id_criador) references users(id);
+
+alter table respostas
+add constraint fk_criador_resposta
+foreign key (id_criador) references users(id);
+
+alter table comentarios_has_respostas
+add constraint fk_comentario
+foreign key (id_comentario) references comentarios(id);
+
+alter table comentarios_has_respostas
+add constraint fk_resposta
+foreign key (id_resposta) references respostas(id);

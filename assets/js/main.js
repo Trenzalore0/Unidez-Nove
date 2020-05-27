@@ -1,4 +1,6 @@
 let id = localStorage.getItem('id');
+let nome = localStorage.getItem('nome');
+let email = localStorage.getItem('email');
 let log = document.querySelector('.log a');
 let panel = document.querySelector('.painel');
 let main = document.querySelector('.sempainel');
@@ -12,7 +14,7 @@ function logado() {
       main.style.marginTop = "0px";
     } else {
       panel.style.display = "block";
-      main.style.marginTop = "-30px";
+      main.style.marginTop = "-40px";
     }
   });
 }
@@ -26,7 +28,6 @@ if(id == null) {
     log.textContent = 'Logar / Cadastrar';
   }
 } else {
-  let nome = localStorage.getItem('nome');
   log.textContent = `olá ${nome}!`;
   logado();
 }

@@ -1,8 +1,7 @@
 <?php
 
-//header("Access-Control-Allow-Origin: *");
+include "conn.php";
 header('Content-Type: application/json');
-$conn = mysqli_connect('remotemysql.com:3306', 'VO8Zv3eZMb', 'EKJFEVlRwl', 'VO8Zv3eZMb');
 
 if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
     $email = htmlspecialchars($_GET['logEmail']);
@@ -22,6 +21,7 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
             }
         }
     }
+    
     else {
         $usu['email'] = "email não cadastrado";
     }
@@ -40,6 +40,46 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
         }
     }
     $obj['usuario'] = $usu;
+} else if(isset($_GET['gCriador']) && isset($_GET['gConteudo'])) {
+    $criador = htmlspecialchars($_GET['gCriador']);
+    $conteudo = htmlspecialchars($_GET['gConteudo']);
+    $query = mysqli_query($conn, "INSERT INTO comentarios (id_criador, conteudo) VALUES ('$criador', '$conteudo')");
+    if($query == True) {
+        $query1 = mysqli_query($conn, "SELECT * FROM comentarios");
+        if(mysqli_num_rows($query1) > 0) {
+            $i = 0;
+            while($resu = mysqli_fetch_array($query1)) {
+                $usu['idcomentario'] = $resu['id'];  
+                $usu['idcriador'] = $resu['id_criador']; 
+                $usu['comentario'] = $resu['conteudo'];
+                $comentario[$i] = $usu;
+                $i++;
+            }
+        }
+    }
+    $obj['comentarios'] = $comentario;
+} else if(isset($_GET['userId'])) {
+    $user = htmlspecialchars($_GET['userId']);
+    $query = mysqli_query($conn, "SELECT * FROM users WHERE id = '$user'");
+    if(mysqli_num_rows($query) > 0) {      
+        while($resu = mysqli_fetch_array($query)) { 
+            $usu['usuario'] = $resu['nome'];
+        }
+    }
+    $obj = $usu;
+} else {
+    $query1 = mysqli_query($conn, "SELECT * FROM comentarios");
+    if(mysqli_num_rows($query1) > 0) {
+        $i = 0;
+        while($resu = mysqli_fetch_array($query1)) {
+            $usu['idcomentario'] = $resu['id'];  
+            $usu['idcriador'] = $resu['id_criador']; 
+            $usu['comentario'] = $resu['conteudo'];
+            $comentario[$i] = $usu;
+            $i++;
+        }
+    }
+    $obj['comentarios'] = $comentario;
 }
 
 echo json_encode($obj);

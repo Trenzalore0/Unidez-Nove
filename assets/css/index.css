@@ -1,3 +1,18 @@
+.painel {
+  display: none;
+  width: 200px;
+  height: auto;
+  background-color: #4169e180;
+  position: relative;
+  float: right;
+}
+
+input[type="button"] {
+  width: 190px;
+  margin: 5px;
+  background-color: #ff000070;
+}
+
 main {
   height: auto;
   display: flex;
@@ -5,10 +20,13 @@ main {
   align-items: center;
 }
 
-.comentarios {
+.centro {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.comentarios {
   width: 100%;
   height: auto;
   background-color: white;
@@ -46,12 +64,13 @@ main {
   margin-right: 5px;
 }
 
-.painel {
-  display: none;
-  width: 200px;
-  height: auto;
-  background-color: #4169e180;
-  position: relative;
-  float: right;
+input {
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 5px;
 }
 
+.resposta {
+  width: 90%;
+  margin-bottom: 2px;
+}
