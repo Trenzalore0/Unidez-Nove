@@ -101,10 +101,11 @@ function addResposta(comentario, texto, nome, id_resposta) {
 }
 
 function funcResposta(objeto) {
-  minhaPromise(`rComent=${objeto.id}&rCriador=${id}&rConteudo=${objeto.value}`)
+  let texto = objeto.value;
+  minhaPromise(`rComent=${objeto.id}&rCriador=${id}&rConteudo=${texto}`)
     .then(function(data) {
       if(data.resposta.criado == true) {
-        addResposta(objeto.id, objeto.value, nome, 10);
+        addResposta(objeto.id, texto, nome, 10);
       }
     })
 }

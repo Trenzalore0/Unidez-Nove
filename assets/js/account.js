@@ -110,3 +110,7 @@ cad.addEventListener('submit', function(event) {
     }
   }
 })
+
+let footer = document.querySelector('footer');
+footer.style.position = 'fixed';
+footer.style.top = '93vh';
