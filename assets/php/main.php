@@ -14,15 +14,12 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
                 $usu['nome'] = $resu['nome'];
                 $usu['email'] = $resu['email'];
                 $usu['senha'] = $resu['senha'];
-            }
-            else {
+            } else {
                 $usu['email'] = $resu['email'];
                 $usu['senha'] = "senha incorreta";
             }
         }
-    }
-    
-    else {
+    } else {
         $usu['email'] = "email não cadastrado";
     }
     $obj['usuario'] = $usu;
@@ -43,7 +40,7 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
 } else if(isset($_GET['gCriador']) && isset($_GET['gConteudo'])) {
     $criador = htmlspecialchars($_GET['gCriador']);
     $conteudo = htmlspecialchars($_GET['gConteudo']);
-    $query = mysqli_query($conn, "INSERT INTO comentarios (id_criador, conteudo) VALUES ('$criador', '$conteudo')");
+    $query = mysqli_query($conn, "INSERT INTO comentarios (id_criador, contedudo) VALUES ('$criador', '$conteudo')");
     if($query == True) {
         $query1 = mysqli_query($conn, "SELECT * FROM comentarios");
         if(mysqli_num_rows($query1) > 0) {
@@ -58,6 +55,17 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
         }
     }
     $obj['comentarios'] = $comentario;
+} else if(isset($_GET['rComent']) && isset($_GET['rCriador']) && isset($_GET['rConteudo'])) {
+    $comentario = htmlspecialchars($_GET['rComent']);
+    $conteudo = htmlspecialchars($_GET['rConteudo']);
+    $criador = htmlspecialchars($_GET['rCriador']);
+    $query = mysqli_query($conn, "INSERT INTO respostas (conteudo, id_criador, id_comentario) VALUES ('$conteudo', '$criador', '$comentario')");
+    if($query == true) {
+        $usu['criado'] = true;
+    } else {
+        $usu['criado'] = false;
+    }
+    $obj['resposta'] = $usu;
 } else if(isset($_GET['userId'])) {
     $user = htmlspecialchars($_GET['userId']);
     $query = mysqli_query($conn, "SELECT * FROM users WHERE id = '$user'");
@@ -67,6 +75,23 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
         }
     }
     $obj = $usu;
+} else if(isset($_GET['comentId'])) {
+    $comentario = htmlspecialchars($_GET['comentId']);
+    $query = mysqli_query($conn, "SELECT * FROM respostas WHERE id_comentario = '$comentario'");
+    if(mysqli_num_rows($query) > 0) {
+        $i = 0;
+        while($resu = mysqli_fetch_array($query)) {
+            $usu['id'] = $resu['id'];
+            $usu['criador'] = $resu['id_criador'];
+            $usu['conteudo'] = $resu['conteudo'];
+            $usu['comentario'] = $resu['id_comentario'];
+            $resposta[$i] = $usu;
+            $i++;
+        }
+        $obj['respostas'] = $resposta;
+    } else {
+        $obj['respostas'] = null;
+    }
 } else {
     $query1 = mysqli_query($conn, "SELECT * FROM comentarios");
     if(mysqli_num_rows($query1) > 0) {

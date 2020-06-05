@@ -22,9 +22,9 @@ caixa.addEventListener('keypress', function(event) {
   }
 });
 
-function criarComentario(id ,texto, nome) {
+function criarComentario(id_comen ,texto, nome) {
   let unificada = document.createElement('div');
-  unificada.className = id;
+  unificada.className = id_comen;
 
   let comentario = document.createElement('div');
   comentario.className = 'comentario';
@@ -48,11 +48,15 @@ function criarComentario(id ,texto, nome) {
   let center = document.createElement('div');
   center.className = 'centro';
 
+  let coments = document.createElement('div');
+  coments.className = 'respostas';
+  coments.id = `centro${id_comen}`;
+
   let resposta = document.createElement('input');
   resposta.className = 'resposta';
   resposta.type = 'text';
   resposta.placeholder = 'digite aqui...';
-  resposta.id = id;
+  resposta.id = id_comen;
   resposta.addEventListener('keypress', function(event) {
     if(event.key == 'Enter') {
       if(id != null) {
@@ -64,27 +68,71 @@ function criarComentario(id ,texto, nome) {
     }
   });
 
-  center.appendChild(resposta);
+  coments.appendChild(resposta);
+  center.appendChild(coments);
   unificada.appendChild(center);
   area_comentarios.appendChild(unificada);
 }
 
-function funcResposta(objeto) {
-  console.log(objeto);
+function addResposta(comentario, texto, nome, id_resposta) {
+  let seletor = '#centro' + comentario;
+  console.log(seletor, nome);
+  let centro = document.querySelector(seletor);
+  
+  let resposta = document.createElement('div');
+  resposta.className = 'comentarioResp';
+  resposta.id = id_resposta;
+
+  let criador = document.createElement('div');
+  criador.className = 'criador texto center';
+  criador.textContent = nome;
+  resposta.appendChild(criador);
+
+  let divisoria = document.createElement('div');
+  divisoria.className = 'divisoria';
+  resposta.appendChild(divisoria);
+
+  let conteudo = document.createElement('div');
+  conteudo.className = 'conteudo texto center';
+  conteudo.textContent = texto;
+  resposta.appendChild(conteudo);
+
+  centro.appendChild(resposta);
 }
 
-function pegarComents(id ,texto, podemodificar) {
+function funcResposta(objeto) {
+  minhaPromise(`rComent=${objeto.id}&rCriador=${id}&rConteudo=${objeto.value}`)
+    .then(function(data) {
+      if(data.resposta.criado == true) {
+        addResposta(objeto.id, objeto.value, nome, 10);
+      }
+    })
+}
+
+async function pegarComents(id ,texto, podemodificar) {
   let url = '';
   if(podemodificar == true) {
     area_comentarios.innerHTML = "";
-    minhaPromise(url)
+    await minhaPromise(url)
     .then(function(data) {
       let arr = data.comentarios;
       if(arr.length != 0) {
         for(let i = 0; i < arr.length; i++) {
           minhaPromise(`userId=${arr[i].idcriador}`)
-          .then(function(data) {
-            criarComentario(arr[i].idcomentario, arr[i].comentario, data.usuario);
+            .then(function(data) {
+              criarComentario(arr[i].idcomentario, arr[i].comentario, data.usuario);
+              minhaPromise(`comentId=${arr[i].idcomentario}`)
+                .then(function(data) {
+                  if(data.respostas != null || data.respostas != 0) {
+                    let array = data.respostas;
+                    for(let j = 0; j < array.length; j++) {
+                      minhaPromise(`userId=${array[j].criador}`).then(function(data) {
+                        addResposta(array[j].comentario, array[j].conteudo, data.usuario, array[j].id);
+                      })
+                      
+                    }
+                  }
+                })
           })
         }
       }
@@ -100,6 +148,18 @@ function pegarComents(id ,texto, podemodificar) {
             minhaPromise(`userId=${arr[i].idcriador}`)
             .then(function(data) {
               criarComentario(arr[i].idcomentario, arr[i].comentario, data.usuario);
+              minhaPromise(`comentId=${arr[i].idcomentario}`)
+              .then(function(data) {
+                if(data.respostas != null || data.respostas != 0) {
+                  let array = data.respostas;
+                  for(let j = 0; j < array.length; j++) {
+                    minhaPromise(`userId=${array[j].criador}`).then(function(data) {
+                      addResposta(array[j].comentario, array[j].conteudo, data.usuario, array[j].id);
+                    })
+                    
+                  }
+                }
+              })
             })
           }
         }

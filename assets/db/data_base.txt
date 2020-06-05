@@ -31,13 +31,8 @@ create table comentarios (
 create table respostas (
     id int auto_increment not null primary key,
     id_criador int(111),
-    conteudo varchar(1000)
-);
-
-create table comentarios_has_respostas (
-    id int auto_increment not null primary key,
-    id_comentario int(111),
-    id_resposta int(111),
+    conteudo varchar(1000),
+    id_comentario int(100)
 );
 
 alter table comentarios
@@ -48,10 +43,6 @@ alter table respostas
 add constraint fk_criador_resposta
 foreign key (id_criador) references users(id);
 
-alter table comentarios_has_respostas
+alter table respostas
 add constraint fk_comentario
 foreign key (id_comentario) references comentarios(id);
-
-alter table comentarios_has_respostas
-add constraint fk_resposta
-foreign key (id_resposta) references respostas(id);

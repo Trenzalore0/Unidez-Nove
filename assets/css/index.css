@@ -74,3 +74,16 @@ input {
   width: 90%;
   margin-bottom: 2px;
 }
+
+.respostas {
+  width: 90%;
+}
+
+.comentarioResp {
+  width: 90%;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  display: flex;
+  height: auto;
+  border: 1px solid black;
+}
