@@ -1,3 +1,14 @@
+let login = document.querySelector('.login');
+let cad = document.querySelector('.cadastrar');
+
+let logEmail = document.getElementById('logEmail');
+let logSenha = document.getElementById('logSenha');
+
+let cadNome = document.getElementById('cadNome');
+let cadEmail = document.getElementById('cadEmail');
+let cadSenha = document.getElementById('cadSenha');
+let cadConSenha = document.getElementById('cadConSenha');
+
 function metadeJanela() {
   return(`${(window.document.body.scrollWidth / 2) - 200}px`);
 };
@@ -46,17 +57,6 @@ function certoGerado(objeto, mensagem) {
     span.style.display = 'none'; 
   }, 5000);
 }
-
-let login = document.querySelector('.login');
-let cad = document.querySelector('.cadastrar');
-
-let logEmail = document.getElementById('logEmail');
-let logSenha = document.getElementById('logSenha');
-
-let cadNome = document.getElementById('cadNome');
-let cadEmail = document.getElementById('cadEmail');
-let cadSenha = document.getElementById('cadSenha');
-let cadConSenha = document.getElementById('cadConSenha');
 
 login.addEventListener('submit', function(event) {
   event.preventDefault();
