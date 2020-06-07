@@ -9,6 +9,10 @@ let cadEmail = document.getElementById('cadEmail');
 let cadSenha = document.getElementById('cadSenha');
 let cadConSenha = document.getElementById('cadConSenha');
 
+let footer = document.querySelector('footer');
+footer.style.position = 'fixed';
+footer.style.top = '93vh';
+
 function metadeJanela() {
   return(`${(window.document.body.scrollWidth / 2) - 200}px`);
 };
@@ -110,7 +114,3 @@ cad.addEventListener('submit', function(event) {
     }
   }
 })
-
-let footer = document.querySelector('footer');
-footer.style.position = 'fixed';
-footer.style.top = '93vh';
