@@ -1,6 +1,6 @@
 <?php
 
-include "conn.php";
+include 'conn.php';
 header('Content-Type: application/json');
 
 if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
@@ -40,7 +40,8 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
 } else if(isset($_GET['gCriador']) && isset($_GET['gConteudo'])) {
     $criador = htmlspecialchars($_GET['gCriador']);
     $conteudo = htmlspecialchars($_GET['gConteudo']);
-    $query = mysqli_query($conn, "INSERT INTO comentarios (id_criador, contedudo) VALUES ('$criador', '$conteudo')");
+    $novaquery = mysqli_query($conn, "INSERT INTO comentarios (id_criador, conteudo) VALUES ('$criador', '$conteudo')");
+    $query = mysqli_query($conn, "INSERT INTO comentarios (id_criador, conteudo) VALUES ('$criador', '$conteudo')");
     if($query == True) {
         $query1 = mysqli_query($conn, "SELECT * FROM comentarios");
         if(mysqli_num_rows($query1) > 0) {
@@ -107,4 +108,5 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
     $obj['comentarios'] = $comentario;
 }
 
+mysqli_close($conn);
 echo json_encode($obj);

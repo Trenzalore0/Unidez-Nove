@@ -1,8 +1,11 @@
 let exit = document.querySelector('.painel input');
 let caixa = document.querySelector('.caixa_de_comentario');
 let area_comentarios = document.querySelector('.comentarios');
-
-pegarComents(null, null, true);
+let trocar = true;
+let quantidade = 0;
+let tempo = 1000;
+let idComents = [];
+let idResp = [];
 
 exit.onclick = function() {
   localStorage.removeItem('id');
@@ -14,7 +17,7 @@ exit.onclick = function() {
 caixa.addEventListener('keypress', function(event) {
   if(event.key == 'Enter') {
     if(id != null) {
-      pegarComents(id ,caixa.value, false);
+      pegarComents(id, caixa.value, false);
       caixa.value = "";
     } else {
       window.location = 'account.html';
@@ -76,7 +79,6 @@ function criarComentario(id_comen ,texto, nome) {
 
 function addResposta(comentario, texto, nome, id_resposta) {
   let seletor = '#centro' + comentario;
-  console.log(seletor, nome);
   let centro = document.querySelector(seletor);
   
   let resposta = document.createElement('div');
@@ -102,68 +104,88 @@ function addResposta(comentario, texto, nome, id_resposta) {
 
 function funcResposta(objeto) {
   let texto = objeto.value;
-  minhaPromise(`rComent=${objeto.id}&rCriador=${id}&rConteudo=${texto}`)
-    .then(function(data) {
-      if(data.resposta.criado == true) {
-        addResposta(objeto.id, texto, nome, 10);
-      }
-    })
+  minhaPromise(`rComent=${objeto.id}&rCriador=${id}&rConteudo=${texto}`);
 }
 
-async function pegarComents(id ,texto, podemodificar) {
+function pegarComents(id ,texto, podemodificar) {
   let url = '';
   if(podemodificar == true) {
     area_comentarios.innerHTML = "";
-    await minhaPromise(url)
+    minhaPromise(url)
     .then(function(data) {
       let arr = data.comentarios;
       if(arr.length != 0) {
+        quantidade = arr.length;
         for(let i = 0; i < arr.length; i++) {
-          minhaPromise(`userId=${arr[i].idcriador}`)
-            .then(function(data) {
-              criarComentario(arr[i].idcomentario, arr[i].comentario, data.usuario);
-              minhaPromise(`comentId=${arr[i].idcomentario}`)
-                .then(function(data) {
-                  if(data.respostas != null || data.respostas != 0) {
-                    let array = data.respostas;
-                    for(let j = 0; j < array.length; j++) {
-                      minhaPromise(`userId=${array[j].criador}`).then(function(data) {
-                        addResposta(array[j].comentario, array[j].conteudo, data.usuario, array[j].id);
-                      })
-                      
-                    }
-                  }
-                })
-          })
+          colocarComents(arr[i]);
         }
       }
     })
+    trocar = false
   } else {
     url = `gCriador=${id}&gConteudo=${texto}`;
     minhaPromise(url)
       .then(function(data) {
         let arr = data.comentarios;
         for(let i = 0; i < arr.length; i++) {
-          console.log(arr.length, i);
-          if((i+1) == arr.length) {
-            minhaPromise(`userId=${arr[i].idcriador}`)
-            .then(function(data) {
-              criarComentario(arr[i].idcomentario, arr[i].comentario, data.usuario);
-              minhaPromise(`comentId=${arr[i].idcomentario}`)
-              .then(function(data) {
-                if(data.respostas != null || data.respostas != 0) {
-                  let array = data.respostas;
-                  for(let j = 0; j < array.length; j++) {
-                    minhaPromise(`userId=${array[j].criador}`).then(function(data) {
-                      addResposta(array[j].comentario, array[j].conteudo, data.usuario, array[j].id);
-                    })
-                    
-                  }
-                }
-              })
-            })
+          if((i+1) == arr.length  && quantidade < arr.length) {
+            quantidade = arr.length;
+            colocarComents(arr[i]);
           }
         }
       });
   }
 }
+
+function colocarComents(coment) {
+  minhaPromise(`userId=${coment.idcriador}`)
+    .then(function(data) {
+      criarComentario(coment.idcomentario, coment.comentario, data.usuario);
+      pegarResp(coment.idcomentario);
+    })
+}
+
+function pegarResp(id_comentario) {
+  let verificador = false;
+  for(let i = 0; i < idComents.length; i++) {
+    if(id_comentario == idComents[i]) {
+      verificador = true;
+    }
+  }
+  if(verificador == false) {
+    idComents.push(id_comentario);
+  }
+  minhaPromise(`comentId=${id_comentario}`)
+  .then(function(data) {
+    if(data.respostas !== null || data.respostas.length !== 0) {
+      let array = data.respostas;
+      console.log(array);
+      for(let j = 0; j < array.length; j++) {  
+        let verificador2 = false;
+        for(let num = 0; num < idResp.length; num++) {
+          if(array[j].id == idResp[num]) {
+            verificador2 = true;
+          }
+        }
+        if(verificador2 == false) {
+          idResp.push(array[j].id);
+          console.log(array[j].id);
+          minhaPromise(`userId=${array[j].criador}`).then(function(data) {
+            addResposta(array[j].comentario, array[j].conteudo, data.usuario, array[j].id);
+          })
+        } 
+      }
+    }
+  })
+}
+
+function Websocket() {
+  pegarComents(null, null, trocar);
+  for(let i = 0; i < idComents.length; i++) {
+    pegarResp(idComents[i]);
+  }
+}
+
+setInterval(function() {
+  Websocket();
+}, tempo);
