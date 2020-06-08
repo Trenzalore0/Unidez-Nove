@@ -122,6 +122,17 @@ function pegarComents(id ,texto, podemodificar) {
       }
     })
     trocar = false
+  } else if(id == null && texto == null) {
+      minhaPromise(url)
+        .then(function(data) {
+          let arr = data.comentarios;
+          for(let i = 0; i < arr.length; i++) {
+            if((i+1) == arr.length  && quantidade < arr.length) {
+              quantidade = arr.length;
+              colocarComents(arr[i]);
+            }
+          }
+        })
   } else {
     url = `gCriador=${id}&gConteudo=${texto}`;
     minhaPromise(url)
@@ -159,7 +170,6 @@ function pegarResp(id_comentario) {
   .then(function(data) {
     if(data.respostas !== null || data.respostas.length !== 0) {
       let array = data.respostas;
-      console.log(array);
       for(let j = 0; j < array.length; j++) {  
         let verificador2 = false;
         for(let num = 0; num < idResp.length; num++) {
@@ -169,7 +179,6 @@ function pegarResp(id_comentario) {
         }
         if(verificador2 == false) {
           idResp.push(array[j].id);
-          console.log(array[j].id);
           minhaPromise(`userId=${array[j].criador}`).then(function(data) {
             addResposta(array[j].comentario, array[j].conteudo, data.usuario, array[j].id);
           })
@@ -180,9 +189,15 @@ function pegarResp(id_comentario) {
 }
 
 function Websocket() {
-  pegarComents(null, null, trocar);
+  
   for(let i = 0; i < idComents.length; i++) {
     pegarResp(idComents[i]);
+
+  }
+  if(id !== null) {
+    pegarComents(null, null, trocar);
+  } else {
+    pegarComents(null, null, trocar);
   }
 }
 

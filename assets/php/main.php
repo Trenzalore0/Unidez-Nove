@@ -40,7 +40,6 @@ if(isset($_GET['logEmail']) && isset($_GET['logSenha'])) {
 } else if(isset($_GET['gCriador']) && isset($_GET['gConteudo'])) {
     $criador = htmlspecialchars($_GET['gCriador']);
     $conteudo = htmlspecialchars($_GET['gConteudo']);
-    $novaquery = mysqli_query($conn, "INSERT INTO comentarios (id_criador, conteudo) VALUES ('$criador', '$conteudo')");
     $query = mysqli_query($conn, "INSERT INTO comentarios (id_criador, conteudo) VALUES ('$criador', '$conteudo')");
     if($query == True) {
         $query1 = mysqli_query($conn, "SELECT * FROM comentarios");
